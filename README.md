@@ -6,9 +6,14 @@ Zadania systemu operacyjnego:
 * Obsługa zadań użytkownika jako procesów
 * Przydzielanie procesom zasobów komputera: dostępu do jednostki centralnej, pamięci, dysków itd.
 <br />
-<br />
 
 ## 2. Co oznacza wielodostępność, a co wielozadaniowość? 
+
+**Wielodostępność** - wielu użytkowników pracujących z jednym komputerem, sprawia wrażenie samodzielnej pracy 
+<br />
+**Wielozadaniowość** - Każdy użytkownik może uruchomić jednocześnie wiele programów
+<br />
+
 ## 3. Jakie funkcje spełnia wielodostępny system operacyjny i jakie podsystemy wchodzą w jego skład?
 ## 4. Co jest przedmiotem standaryzacji w wielodostępnych systemach operacyjnych?
 ## 5. Co to jest proces?
