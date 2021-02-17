@@ -58,9 +58,13 @@ Zawiera informacje obejmujące:
 
 ## 7. Co oznacza współbieżne wykonywanie procesów?
 
-
+W systemie wielodostępnym, pracującym z podziałem czasu, jest jednocześnie wiele procesów. Procesy działają współbieżnie, co oznacza konieczność podziału zdolności obliczeniowej procesora (przełączanie) między poszczególne procesy, ponieważ w każdej chwili czasu wykonywany jest tylko jeden proces. Proces wykonywany jest w sposób sekwencyjny, tzn. w każdej chwili na zamówienie procesu wykonywany jest jeden rozkaz kodu programu.
+<br />
 
 ## 8. Jak powstaje nowy proces?
+
+
+
 ## 9. Jak proces jest kończony?
 ## 10. Jak działa funkcja systemowa exec?
 ## 11. Jak działa funkcja systemowa fork?
