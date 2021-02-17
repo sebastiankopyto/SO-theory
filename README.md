@@ -29,12 +29,37 @@ Podsystemy wykonujące zadania:
 
 ## 4. Co jest przedmiotem standaryzacji w wielodostępnych systemach operacyjnych?
 
+* przenośność aplikacji (**portability**)
+* możliwość współpracy oprogramowania działającego na różnych maszynach (**interoperability**)
+* skalowaność (**scalability**) - możliwość rozbudowy sprzętowej i rozbudowy aplikacji bez konieczności zmian systemu
 
+**Główna istota standardu**: określenie interfejsu, a nie implementacji.
+<br />
 
 
 ## 5. Co to jest proces?
+
+Proces jest to wykonywnay program. <br />
+Składa się z kodu progrmau i przydzielonego mu obszaru pamięci. <br />
+Program, zawarty w pliku przechowywanym na dysku, ma charkater bierny. Proces z licznikiem rozkazów określającym kolejny rozkaz do wykonania ma charakter aktywny. Ten sam program może być wykonywany jako kilka niezależnych procesów, np. program vi wywołany przez dwóch użytkowników.
+<br />
+
 ## 6. Co to jest blok kontrolny procesu i do czego służy?
+
+Zawiera informacje obejmujące:
+* **Stan procesu** 
+* **Licznik rozkazów** - wskazuje adres następnej instrukcji do wykonania
+* **Rejestry procesora** - w zależności od architektury komputera: akumulatory, rejestry indeksowe, wskaźniki stosu, rejestry ogólnego przeznaczenia, rejestry warunków. Blok kontrolny zawiera informacje pamiętane w rejestrach w celu kontynuacji wykonywania procesu po przerwaniu.
+* **Informacje związane z planowaniem przydziału czasu procesora** - priorytet procesu, wskaźniki do kolejek porządkujących, inne parametry
+* **Informacje dotyczące zarządzania pamięcią**
+* **Informacje do rozliczeń** - zużyty czas procesora, czas rzeczywisty, ograniczenia czasu, numery konta, zadań, procesów
+* **Informacje o stanie opacji wejścia wyjścia** - lista otwartych plików, wykaz urządzeń przydzielonych do procesu, informacja o niezrealizowanych zamówieniach na operacje wejścia/wyjścia.
+<br />
+
 ## 7. Co oznacza współbieżne wykonywanie procesów?
+
+
+
 ## 8. Jak powstaje nowy proces?
 ## 9. Jak proces jest kończony?
 ## 10. Jak działa funkcja systemowa exec?
