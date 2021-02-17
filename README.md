@@ -13,9 +13,25 @@ Zadania systemu operacyjnego:
 <br />
 **Wielozadaniowość** - Każdy użytkownik może uruchomić jednocześnie wiele programów
 <br />
+<br />
 
 ## 3. Jakie funkcje spełnia wielodostępny system operacyjny i jakie podsystemy wchodzą w jego skład?
+
+Podsystemy wykonujące zadania:
+* **Zarządzanie procesami** - tworzenie, usuwanie, zawieszanie, odwieszanie procesow, mechanizmy synchronizacji procesów, komunikacja między procesami
+* **Zarządzanie pamięcią** - zarządzanie pamięcią główną, obszarem wymiany (swap), pojęcie pamięci wirtualnej
+* **Zarządzanie przestrzenią dyskową** - zarządzanie wolną przestrzenią dysków, procesami, zapisywanie informacji na dysku, szeregowanie zadań zapisu i odczytu
+* **Zarządzanie operacjami wejścia/wyjścia** - obejmuje podsystem buforowania, interfejs: urządzenia - sterowniki, sterowniki urządzeń
+* **Zarządzanie plikami** - tworzenie, usuwanie plików i katalogów, elementarne operacje z plikami i katalogami
+* **Podsystem ochrony** - ochrona procesów przed działaniem innych procesów; mechanizmy zapewniające, że pliki, segmenty pamięci, CPU, inne zasoby są udostępnione tylko tym procesom, które mają autoryzacje systemu operacyjnego. Ogólnie: mechanizmy kontroli dostępu programów, procesów, użytkowników do zasobów systemu komputerowego.
+* **Praca sieciowa** - usługi umożliwiające komunikację w sieci, pojęcie systemów rozproszonych
+<br />
+
 ## 4. Co jest przedmiotem standaryzacji w wielodostępnych systemach operacyjnych?
+
+
+
+
 ## 5. Co to jest proces?
 ## 6. Co to jest blok kontrolny procesu i do czego służy?
 ## 7. Co oznacza współbieżne wykonywanie procesów?
