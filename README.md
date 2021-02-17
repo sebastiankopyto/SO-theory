@@ -1,4 +1,13 @@
 ## 1. Co to jest system operacyjny?
+Program pośredniczący między systemem komputerowym a użytkownikiem.
+<br />
+<br />
+Zadania systemu operacyjnego:
+* Obsługa zadań użytkownika jako procesów
+* Przydzielanie procesom zasobów komputera: dostępu do jednostki centralnej, pamięci, dysków itd.
+<br />
+<br />
+
 ## 2. Co oznacza wielodostępność, a co wielozadaniowość? 
 ## 3. Jakie funkcje spełnia wielodostępny system operacyjny i jakie podsystemy wchodzą w jego skład?
 ## 4. Co jest przedmiotem standaryzacji w wielodostępnych systemach operacyjnych?
