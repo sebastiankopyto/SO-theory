@@ -115,6 +115,7 @@ Proces macierzysty uzyskuje ifnromacje, który z wielu możliwych potomków zako
 Jądro zwalnia następnie pozycję procesu potomnego w tablicy procesów.
 
 <br>
+
 ## 10. Jak działa funkcja systemowa exec?
 
 Służy do wykonania określonego, innego programu. Umieszcza w obszarze pamięci procesu kopię pliku wykonywalnego i rozpoczyna jego wykonywanie. Zawartość kontekstu (obraz pamięci) procesu wywołującego funkcję exec zostaje zamazana.
