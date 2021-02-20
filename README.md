@@ -302,15 +302,37 @@ Pliki - jednostki logiczne przechowywanej informacji, niezależne od właściwos
 
 ## 24. Co to jest i-węzeł?
 
-Rekord przechowujący większośc informacji o pliku
+Rekord przechowujący większośc informacji o pliku. Tworzone są wtedy, gdy tworzony jest system plików. <br>
+Liczba i-węzłów w systemie plików zależy od jego rozmiaru oraz założonego średniego rozmiaru pliku ( np. 2kB lub 6kB).
+<br>
+Każdy i-węzeł zajmuje 128 bajtów. i-węzły tworzą tablicę i-węzłów. <br>
+
+Poszczególne i-węzły identyfikowane sa przez numery określające ich położenie w tablicy i-węzłów.
+<br>
+
+Aby sprawdzić jaki i-węzeł został przyporządkowany danemu plikowi należy użyć polecenia _ls -i_.
+
+
 
 ## 25. Jakie informacje są przechowywane w i-węźle?
 
-
+* typ pliku
+* prawa dostępu do pliku
+* liczba dowiązań do pliku
+* identyfikator właściciela
+* identyfikator grupy
+* rozmiar pliku w bajtach
+* czas ostatniej modyfikacji pliku
+* czas ostaniego dostępu do pliku
+* czas ostatniej zmiany informacji w i-węźle
+* 12 wskaźników zawierających adresy bloków z danymi pliku (bloki bezpośrednio adresowane)
+* wskaźnik zawierający adres bloku, w którym przechowywane są adresy bloków z danymi (adresowanie pośrednie jednostopniowe)
+* wskaźnik zawierający adres bloków, w których przechowywane są adresy blokó z adresami bloków z danymi (adresowanie pośrednie dwustopniowe)
+* wskaźnik wykorzystywany w adresowaniu pośrednim trzystopniowym
 
 ## 26. Jakie informacje przechowywane są w pliku typu "katalog"?
 
-
+Nazwy plików są przechowywane w katalogach, łącznie z numerami odpowiadających tym plikom i-węzłów. Dzięki temu możliwe jest odczytanie artybutów plików oraz odszukanie przechowywanych w nim danych.
 
 ## 27. Co to jest katalog z punktu widzenia użytkownika, a co z punktu widzenia budowy systemu plików?
 
@@ -318,11 +340,27 @@ Rekord przechowujący większośc informacji o pliku
 
 ## 28. Jaka jest różnica między adresowaniem bezpośrednim a adresowaniem pośrednim?
 
+Adresowanie tylko bezpośrednie nie jest efektywne i znacznie ograniczyłoby rozmiary plików <br><br>
 
+Jeśli blok zajmuje 4kB <br>
+* Adresowanie bezpośrednie pozwala na zaadresowanie danych plików o rozmiarach nieprzekraczających 48kB<br>
+* Adresowanie pośrednie pozwala na zaadresowanie danych plików o rozmiarach nieprzekraczających 48kB + 1024* kB = 4144kB
+* Podwójne adresowanie pośrednie pozwala na zaadresowanie danych plików o rozmiarach nieprzekraczających 48kB + 1024\*4 kB + 1024 \* 1024 \* 4 kB
+Adresowanie pośrednie pozwala na zaadresowanie danych plików o rozmiarach nieprzekraczających 48 kB + 1024 \* 4 kB + 1024 \* 1024 \* 4 kB + 1024 \* 1024 \* 1024 \* 4 kB
 
 ## 29. Wyjaśnić mechanizm rozmieszczania bloków i fragmentów pliku w blokach na dysku?
 
+Do przechowywania danych na dysku system UNIX używa bloków i fragmentów.<br>
+**Fragment** jest najmniejszą jednostką przestrzeni dyskowej zajmowanej przez plik.
+**Rozmiar bloku** jest całkowitą wielokrotnością rozmiaru fragmentu (stosunek rozmiaru bloku do rozmiaru fragmentu nie może jednak przekraczać 8). np. rozmiar bloku wynosi 8kB a rozmiar fragmentu 2kB.
+<br><br>
 
+**Reguły przydzielania bloków i fragmentów**
+1. Jeśli rozmiar pliku jest mniejszy niż rozmiar fragmentu, plikowi temu przydzielany jest pierwszy wolny fragment
+2. Jeśli rozmiar pliku jest większy niż rozmiar fragmentu, ale mniejszy niż rozmiar bloku, plikowi temu przydzielane są kolejne fragmenty należące do tego samego bloku.
+3. Jeśli rozmiar pliku jest większy niż rozmiar blou, to plikowi przydzielana jest odpowiednia liczba bloków, niekoniecznie znajdujących się obok siebie, o łącznym rozmiarze nieprzekraczającym rozmiaru pliku. <br>
+Pozostała część pliku umieszczana jest zgodnie z regułami 1 oraz 2.
+<br>
 
 ## 30. Jak adresowane są bloki i fragmenty pliku na dysku?
 
