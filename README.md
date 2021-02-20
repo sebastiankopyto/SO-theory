@@ -159,45 +159,150 @@ Program, który pośredniczy pomiędzy jądrem, systemem plików i programami us
 
 <br>
 
+**Podstawowe funkcje shella**<br>
+* Przekazywanie sterowania do programu wybranego poleceniem użytkownika
+* Wykonywanie wbudowanych poleceń
+* Dostarczenie języka do pisania skryptów
+* Ustawianie środowiska pracy
+* Przywoływanie i edycja uprzednio wydanych poleceń
+* Przeadresowywanie wejścia - wyjścia poleceń
+* Generowanie nazw plików
+* Umożliwienie łączenia poleceń w potok
+* Umożliwienie przetwarzania w drugim planie (nie interakcyjnie)
+
 ## 15. Podać przykłady programów shell i ich właściwości?
 
 
 
 ## 16. W jaki sposób program shell interpretuje polecenie?
 
+**Polecenia proste**
 
+1. Interpretator wczytuje wiersz poleceń z pliku standardowego (terminala) i interpretuje go.
+2. Interpretator (shel) wykonuje rozwidlenie (fork).
+3. Następnie wykonuje funkcję wait
+4. Wykonywana jest funkcja exec w odniesienio do procesu potomnego i proces ten wykonuje polecenie (program) umieszczone w wierszu polecenia.
+5. Po tym czasie interpretator czeka na zakończenie procesu potomnego
+6. Po jego zakończeniu wczytuje kolejne polecenie.
+
+**Uwaga**<br>
+W przypadku poleceń wbudowanych (cd, for, while) interpretator wykonuje je bezpośrednio bez tworzenia nowych procesów.
+<br><br>
+
+**Polecenia ze zmianą standardowego pliku wyjściowego**
+<br>
+np. ls -l > lista <br>
+
+1. Proces potomny tworzy plik lista.
+2. Jeśli próba utworzenia pliku nie powiedzie się, to proces potomny kończy działanie.
+3. Jeśli plik zostanie utworzony, proces potomny zamyka standardowy plik wyjściowy i powiela deskryptor nowego.
+4. Po zapisaniu informacji, zamika plik wyjściowy i kończy działanie.
+<br><br>
+
+**Wykonywanie polecenia w tle** <br>
+np. grep user * > lista & <br>
+1. Interpretator rozpoznaje w wierszu polecenia znak & (przetwarzanie w tle).
+2. Ustawia odpowiednią zmienną lokalną
+3. Pod koniec pętli sprawdza jej wartość i jeśli jest ustawiona to nie wykonuje funkcji wait, ale przechodzi do początku pętli i wczytuje następne polecenie
+<br><br>
+
+**Polecenie z potokiem** <br>
+np. ls -l | wc <br>
+1. Interpretator wykonuje funkcje **fork** i tworzy proces potomny **wc**
+2. Proces potomny tworzy potok **pipe** i wywołuje funkcję **fork** tworząc swojego potomka
+3. Proces ten (wnuk interpretatora) wykonuje pierwszą część polecenia (ls)
+4. W celu pisania do potoku, zamyka deskryptor pliku standardowego
+5. Powiela deskryptor potoku do pisania, a następnie zamyka go
+6. Proces (wc) zamyka swój standardowy plik wejściowy, a powiela deskryptor potoku do czytania
+7. Po przeczytaniu zamyka deskryptr potoku i wykonuje polecenie wc
+8. Interpretator wraca do początku pętli
+
+<br>
 
 ## 17. Na czym polega wykonywanie polecenia w tle (w drugim planie)?
 
 
-
 ## 18. Co to jest planowanie (szeregowanie) procesów?
 
+Polega na określaniu w jakiej kolejności procesy uzyskują dostęp do zasobów komputera: procesora, pamięci operacyjnej. <br>
+Celem planowania jest zwykle zapewnienie jak najlepszego wykorzystania procesora.<br><br>
+Procesy starając się o dostęp do procesora czy konkretnego urządzenia czekają w kolejkach
+* kolejka zadań
+* kolejka procesów gotowych do procesora
+* kolejki do urządzeń wejścia/wyjścia
+Wykonywany proces może:
+* Zażądać operacji wejścia/wyjścia - zostanie wtedy umieszczony w kolejce do urządzenia wejścia/wyjścia
+* utworzyć nowy proces i czekać na jego ukończenie
+* wykorystać cały kwant czasu lub w wyniku przerwania zostać przeniesiony do kolejki procesów gotowych
 
+<br><br>
+
+**Kryteria planowania**
+1. Wykorzystanie procesora, w % czasu
+2. Przepustowość - liczba procesów kończonych w jednostce czasu
+3. Czas cyklu przetwarzania - średni czas przetwarzania procesu od chwili utworzenia do zakończenia
+4. Czas odpowiedzi - średni czasoczekiwania w kolejkach
+5. Czas odpowiedzi - w systemach interakcyjnych - czas między zgłoszeniem zamówienia przez użytkownika a pierwszą odpowiedzią.
+<br> 
 
 ## 19. Podać przykłady algorytmów szeregowania procesów i wyjaśnić ich działanie?
 
+* **FCFS (First Come, First Served)** - pierwszy nadszedł - pierwszy obsłużony. Realizowany za pomocą kolejki FIFO. Wady: efekt konwoju, kłopotliwy w systemach z podziałem czasu. Jest algorytmem niewywłaszczającym.
+* **SJF (Shortest Job First)** - najpierw najkrótsze zadanie. Procesor przydzielany jest procesowi o najkrótszej następnej fazie procesora. Teoretycznie daje minimalny średni czas oczekiwania. Wymaga jednak dokładnego oszacowania czasu przyszłej fazy procesora dla każdego procesu. Szacowanie to wykonywane jest zwykle na podstawie pomiarów czasu faz poprzednich. Może być wywłaszczający lub nie.
+* **Planowanie priorytetowe** - każdemu procesowi jest przydzielany pewien priorytet. Wybierany jest proces o najwyższym priorytecie. Algorytm SJF jest szczególnym przypadkiem. Może być wywłaszczającym lub nie.
+* **Planowanie rotacyjne** - zaprojektowany dla systemów z podziałem czasu. Ustalony jest kwant czasu (10-100 ms). Kolejka procesów ma charakter cykliczny. Kolejnym procesom przydzielany jest co najwyżej kwant czasu.
+* **Przełączanie kontekstu** - obejmuje czynności związane z przechowaniem stanu (informacji wskazanych w bloku kontrolnym) starego procesu i załadowania stanu procesu nowego. Czas przełączania kontekstu (rzędu 1-100 us) istotnie wpływa na wydajność systemu.
 
+<br>
 
 ## 20. Jak rozwiązuje się zagadnienie planowania procesów w systemach typu UNIX?
 
-
+* System z podziałem czasu - jądro przydziela procesor gotowemu procesowi na jeden kwant czasu - zgodnie z algorytmem rotacyjnym
+* Po upływie tego czasu wywłaszcza proces i przydziela procesor procesowi następnemu w kolejce. Wybiera proces załadowany do pamięci o najwyższym priorytecie
+* Jądro okresowo przelicza i modyfikuje priorytety wszystkich procesów gotowych
+* Wywłaszczony proces jest umieszczany w jednej z kolejek priorytetorywch i gdy przyjdzie na niego kolej - jest wznawiany od miejsca, w którym nastąpiło zawieszenie wykonywania
 
 ## 21. Kiedy, po co i jak wykonywany jest proces ładowania systemu?
 
-
+* Celem procesu ładowanie jest umieszczenie systemu operacyjnego w pamięci operacyjnej i rozpoczęcie jego wykonywania.
+* Składa się z kilku etapów:
+  1. Inicjalizacja i testowanie sprzętu
+  2. Wczytywanie i umieszczenie w pamięci bloku systemowego (blok **0**) z dysku
+  3. Program zawarty w bloku systemowym ładuje jądro systemu operacyjnego z pliku systemowego (np. **/stand/vmunix**) do pamięci. Przekazuje sterowanie do pierwszej instrukcji jądra. Program jądra systemu zaczyna się wykonywać.
+  4. Wykrywanie i konfiguracja urządzeń, odnalezienie głównego katalogu plików.
+  5. Przygotowanie środowiska procesu **0**. Wykonywanie programu systemu jako procesu **0** wykonywanego w trybie jądra. Utworzenie procesów jądra, np. procesów zarządzania pamięcią
+  6. Rozwidlenie procesu **0** (wywołanie funkcji fork z jądra). Utworzony proces **1** tworzy kontekst poziomu użytkownika i przechodzi do trybu użytkownika
+  7. Proces **1** wywołuje funkcję systemową exec wykonując program **/sbin/init**
+  8. Proces **init** wczytuje plik **/etc/inittab** i rozmnaża procesy
+  9. Inicjacja wewnętrzych struktur danych jądra, tworzenie np. listy wolnych buforów, i-węzłów, kolejek, inicjacja struktur segmentów i tablic stron pamięci
+  10. Sprawdzenie głównego i pozostałych systemów plików (ew. uruchomienie fsck).
+  11. Wywoływane są procesy **getty** monitorujące konsole i terminale systemu komputerowego, zgodnie z deklaracjami w pliku **inittab**, a proces **init** wykonuje funkcję systemową **wait** monitorując zakończenie procesów potomnych. Proces **init** tworzy również procesy demony.
 
 ## 22. Jaki proces ma PID=1, jakie zadania wykonuje?
 
-
+1. Rozwidlenie procesu **0** (wywołanie funkcji fork z jądra). Utworzony proces **1** tworzy kontekst poziomu użytkownika i przechodzi do trybu użytkownika
+2. Proces **1** wywołuje funkcję systemową exec wykonując program **/sbin/init**
+3. Proces **init** wczytuje plik **/etc/inittab** i rozmnaża procesy
+4. Inicjacja wewnętrzych struktur danych jądra, tworzenie np. listy wolnych buforów, i-węzłów, kolejek, inicjacja struktur segmentów i tablic stron pamięci
+5. Sprawdzenie głównego i pozostałych systemów plików (ew. uruchomienie fsck).
+6. Wywoływane są procesy **getty** monitorujące konsole i terminale systemu komputerowego, zgodnie z deklaracjami w pliku **inittab**, a proces **init** wykonuje funkcję systemową **wait** monitorując zakończenie procesów potomnych. Proces **init** tworzy również procesy demony.
 
 ## 23. Co to są pliki i jakie typy plików występują w systemie UNIX?
 
+Pliki - jednostki logiczne przechowywanej informacji, niezależne od właściwosci fizycznych urządzeń pamięciowych Zwykle w plikach przechowywane są programy lub dane (tekst, liczby, grafika, itp.).
+<br><br>
 
+**Podstawowe typy plików**
+* pliki zwykłe
+* pliki specjalne
+* katalogi
+* dowiązania symboliczne
+* potoki nazwane FIFO (named pipe)
+* gniazda (UNIX--domain sockets)
 
 ## 24. Co to jest i-węzeł?
 
-
+Rekord przechowujący większośc informacji o pliku
 
 ## 25. Jakie informacje są przechowywane w i-węźle?
 
