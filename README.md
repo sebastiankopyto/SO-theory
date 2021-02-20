@@ -63,10 +63,62 @@ W systemie wielodostępnym, pracującym z podziałem czasu, jest jednocześnie w
 
 ## 8. Jak powstaje nowy proces?
 
+* Nowy proces tworzony jest rzez wywolanie funkcji _fork_
+* Proces wywołujący te funkcję nazywany jest **procesem macierzystym**, a proces utworzony **potomkiem**
+* Potomek uzyskuje pozycję w tablicy procesów
+* Proces uzyskuje **identyfikator** (PID)
+* Tworzona jest kopia kontekstu macierzystego (nowy proces zawiera kopię przestrzeni adresowej procesu macierzystego)
+* Uaktualnione zostają liczniki odwołań do plików ii-węzłów, z którymi związany jest potomek
+* Identyikator potomka przekazywany jest procesowi macierzystemu
+* Potomek dziedziczy prawa dostępu do otwartych plików, a także dzieli dostęp do plików. Procesy mają identyczne kopie segmentów instrukcji, danych i stosu
+* Po wykonaniu funkcji _fork_ wywoływana jest zwykle funkcja _exec_
+* Służy do wykonania określonego, innego programu. Umieszcza w obszarze pamięci procesu kopię pliku wykonywalnego i rozpoczyna jego wykonywanie. Zawartość kontekstu (obraz pamięci) procesu wywołującego funkcję exec zostaje zamazana.
 
+<br>
+
+**Tworzenie nowego procesu przy wykonywaniu polecenia zewnętrznego**
+
+* Proces to wykonywany program, tzn program, który został rozpoczęty i jeszcze nie zakończył się.
+* Proces składa się z kodu programu i przydzielonego mu obszaru pamięci.
+* Polecenie wykonywane jest dwuetapowo
+* Tworzony jest nowy proces (proces potomka), który ma wykonywać polecenie; jest to kopia bieżącego procesu. Mechanizm ten nosi nazwę rozwidalnia (fork, forking a process)
+* Nowy proces jest przekształcany w proces wykonujący polecenie; mechanizm nosi nazwę wykonywania (executing a command)
+* Dziedziczone przez proces potomny środowisko obejmuje informacje o właścicielu i grupie o standardowych strumieniach, do ktorych przyłączony jest terminal, otwartych plikach, bieżącym katalogu i zmiennych globalnych
+<br>
 
 ## 9. Jak proces jest kończony?
+
+**Kończenie procesu przez użytkownika**<br>
+Proces można przerwać wysyłając do niego odpowiedni sygnał. Można w tym celu skorzystać z polecenia **kill**, które powoduje wysyłanie sygnałów do procesów.<br>
+_kill [-s nazwa sygnału | numer sygnału] PID [PID ...]_<br>
+gdzie PID to identyfikator procesu.<br>
+Polecenie **kill**, w którym pominięto nazwę i numer sygnału wysyła do wskazanego procesu sygnał o numerze 15 (SIGTERM). Taki sygnał może być przechwycony, zignorowany lub zablokowany.<br>
+Sygnałem którego nie można przechwycić, zignorować ani zablokować jest sygnał o numerze 9 (SIGTERM). <br>
+Polecenie:<br>
+  _kill -9 PID_<br>
+  zawsze zakończy proces o podanym PID.<br>
+**Przykłady sygnałów**<br>
+* 1 HUP zerwanie łączności
+* 2 INT przerwanie (wysyłany również z klawiatur: Ctrl + C)
+* 3 QUIT zakończenie (wysyłany również z klawiatury: Ctrl + \\)
+* 9 KILL bezwarunkowe zakończenie procesu
+* 15 TERM programowe zakończenie procesu
+
+<br><br>
+
+**Naturalne kończenie wykonywania procesu**<br>
+Proces kończy się w naturalny sposób, gdy wykona ostatnią instrukcję, wywołuje wtedy funkcję _exit_. <br>
+Proces przechodzi do stanu zombi, zwalnia swoje zasoby i oczyszcza kontekst, za wyjątkiem pozycji w tablicy procesów.<br>
+Proces macierzysty czekający na zakończenie potomka wykonuje funkcję _wait_.<br>
+Jądro szuka potomków takiego procesu, bedących w stanie zombi - jeśli znajdzie, to przekazuje PID potomka oraz parametr funkcji _exit_ i dostarcza do procesu macierzystego.<br>
+Proces macierzysty uzyskuje ifnromacje, który z wielu możliwych potomków zakończył pracę. <br>
+Jądro zwalnia następnie pozycję procesu potomnego w tablicy procesów.
+
+<br>
 ## 10. Jak działa funkcja systemowa exec?
+
+Służy do wykonania określonego, innego programu. Umieszcza w obszarze pamięci procesu kopię pliku wykonywalnego i rozpoczyna jego wykonywanie. Zawartość kontekstu (obraz pamięci) procesu wywołującego funkcję exec zostaje zamazana.
+
 ## 11. Jak działa funkcja systemowa fork?
 ## 12. Co to są funkcje systemowe?
 ## 13. W jakich stanach może być proces?
